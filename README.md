@@ -4,7 +4,7 @@ You can play games in this repository on Minecraft Pi or on Minecraft PC using t
 
 # Games
 
-# Hide N Seek
+## Hide N Seek
 
 hidenseek.py gets the player to use the Debug F3 screen block coordinates to try and find and mine a hidden diamond block.
 First get the X (East / West) and Z (North / South) coordinates right then look down and get the Y-coordinate sorted out to find the block.
