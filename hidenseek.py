@@ -1,7 +1,7 @@
 # A hide n seek game to help learn about 3d coordinates
 
 ### IMPORTANT ###
-# Issue this command in the Minecraft console:
+# Issue this command in the Minecraft console if you're on the PC version:
 # setworldspawn 0 0 0
 # This makes the coordinates on the debug F3 screen match up with
 # what's being reported to the Python interface.
@@ -24,15 +24,17 @@ offsetZ = randint(50, 100) * randrange(-1, 2, 2) #Generates either -1 or 1
 hideX = pos.x + offsetX
 hideZ = pos.z + offsetZ
 
+print("Finding a y-coordinate at candidate x=%d, z=%d" % (hideX, hideZ))
+
 #Find the surface level at that location.
 
 #Start at the top of the world and work down until you meet
 #the ground (or water or leaves)
-for candidateY in range(255, 0, -1):
+for candidateY in range(255, -255, -1):
     if(mc.getBlock(hideX, candidateY, hideZ) != block.AIR):
         break
 
-if candidateY < 10:
+if candidateY < -245:
     print("Please try again to find a better hiding place away from the bedrock")
     exit(1)
 
@@ -43,15 +45,12 @@ mc.setBlocks(hideX - 1, hideY - 1, hideZ - 1, hideX + 1, hideY + 1, hideZ + 1, b
 #Make the centre a diamond block. Mine this to stop the countdown and win.
 mc.setBlock(hideX, hideY, hideZ, block.DIAMOND_BLOCK)
 
-positionMessage = str(hideX) + ", " + str(hideY) + ", " + str(hideZ)
-message = "Block is hiding at " + positionMessage
-mc.postToChat(message)
-print message
-
-gameTimeSeconds = 120
+gameTimeSeconds = 100
 startTimeSeconds = time.time()
 
 displayUpdatedForTime = None
+
+ticks = 0
 
 while True:
     elapsedTimeSeconds = time.time() - startTimeSeconds
@@ -65,9 +64,20 @@ while True:
         mc.postToChat("Well done; you mined the diamond!")
         break #Break out of loop if the block has been found and mined
     if timeLeftSecondsRounded % 10 == 0 and displayUpdatedForTime != timeLeftSecondsRounded:
-        #Post an update on chat every 10 seconds
         displayUpdatedForTime = timeLeftSecondsRounded
-        mc.postToChat(str(timeLeftSecondsRounded) + " seconds left to find block at " + positionMessage)
+        print("%d seconds left" % timeLeftSecondsRounded)
+
     #Sleep for a short while to avoid this being a tight loop
     sleep(0.1)
 
+    if ticks % 20 == 0:
+        userposition = mc.player.getTilePos()
+        mc.postToChat("%d seconds left" % timeLeftSecondsRounded)
+        blockMessage = "Block is at: %4d, %4d, %4d" % (hideX, hideY, hideZ)
+        userPosMessage = "You are at:: %4d, %4d, %4d" % (userposition.x, userposition.y, userposition.z)
+        mc.postToChat(blockMessage)
+        mc.postToChat(userPosMessage)
+        print(blockMessage)
+        print(userPosMessage)
+
+    ticks = ticks + 1
