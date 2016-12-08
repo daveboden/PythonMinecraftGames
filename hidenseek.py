@@ -102,8 +102,8 @@ while True:
     if ticks % 5 == 0:
         userposition = mc.player.getTilePos()
         mc.postToChat("%d seconds left" % timeLeftSecondsRounded)
-        blockMessage = "Block is at: %4d, %4d, %4d" % (hideX, hideY, hideZ)
-        userPosMessage = "You are at:: %4d, %4d, %4d" % (userposition.x, userposition.y, userposition.z)
+        blockMessage =   "Block at : %4d, %4d, %4d" % (hideX, hideY, hideZ)
+        userPosMessage = "You're at: %4d, %4d, %4d" % (userposition.x, userposition.y, userposition.z)
         mc.postToChat(blockMessage)
         mc.postToChat(userPosMessage)
         print(blockMessage)
